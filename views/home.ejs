@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Font Awesome Icons CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <title>Weather App by Saurabh Kumar</title>
+  <style>
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    /* CSS Variables for consistent theming */
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --accent-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+      --glass-bg: rgba(255, 255, 255, 0.15);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --text-primary: #ffffff;
+      --text-secondary: #e8e8e8;
+      --shadow-main: 0 20px 40px rgba(0, 0, 0, 0.3);
+      --shadow-hover: 0 25px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--primary-gradient);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--text-primary);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Animated Background Elements */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+      animation: float 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-15px) rotate(1deg); }
+      66% { transform: translateY(-10px) rotate(-1deg); }
+    }
+
+    /* Floating Weather Elements */
+    .weather-bg-element {
+      position: absolute;
+      font-size: 30px;
+      opacity: 0.3;
+      animation: floatRandom 10s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .weather-bg-element:nth-child(1) {
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .weather-bg-element:nth-child(2) {
+      top: 20%;
+      right: 15%;
+      animation-delay: 2s;
+    }
+
+    .weather-bg-element:nth-child(3) {
+      bottom: 30%;
+      left: 20%;
+      animation-delay: 4s;
+    }
+
+    .weather-bg-element:nth-child(4) {
+      bottom: 15%;
+      right: 10%;
+      animation-delay: 6s;
+    }
+
+    @keyframes floatRandom {
+      0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+      25% { transform: translateY(-20px) translateX(10px) rotate(5deg); }
+      50% { transform: translateY(-10px) translateX(-5px) rotate(-3deg); }
+      75% { transform: translateY(-15px) translateX(-10px) rotate(3deg); }
+    }
+
+    /* Main Container */
+    .container {
+      background: var(--glass-bg);
+      padding: 60px 50px;
+      border-radius: 30px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      width: 100%;
+      max-width: 450px;
+      box-shadow: var(--shadow-main);
+      border: 1px solid var(--glass-border);
+      position: relative;
+      animation: slideInUp 1s ease-out;
+      transition: all 0.4s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Decorative Elements */
+    .container::before {
+      content: '🌤️';
+      position: absolute;
+      top: -25px;
+      right: -25px;
+      font-size: 50px;
+      animation: bounce 3s infinite;
+    }
+
+    .container::after {
+      content: '☁️';
+      position: absolute;
+      bottom: -20px;
+      left: -20px;
+      font-size: 35px;
+      animation: bounce 3s infinite 1.5s;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-15px) scale(1.1); }
+    }
+
+    /* Header Styles */
+    .header {
+      margin-bottom: 45px;
+      position: relative;
+    }
+
+
+
+    .header h1 {
+      font-size: 36px;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      background: linear-gradient(45deg, #fff, #e8e8e8, #fff);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientMove 3s ease-in-out infinite;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+
+    @keyframes gradientMove {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .header .subtitle {
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      opacity: 0.9;
+      margin-bottom: 10px;
+    }
+
+    .header .tagline {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      opacity: 0.8;
+      font-style: italic;
+    }
+
+    /* Weather Form Styles */
+    .weather-form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .form-group {
+      position: relative;
+    }
+
+    .weather-form label {
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      text-align: left;
+      position: relative;
+    }
+
+    .weather-form label::before {
+      content: '📍';
+      margin-right: 8px;
+      font-size: 14px;
+    }
+
+    .weather-form input {
+      width: 100%;
+      padding: 18px 25px;
+      border-radius: 20px;
+      border: 2px solid transparent;
+      outline: none;
+      font-size: 16px;
+      font-family: inherit;
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--text-primary);
+      backdrop-filter: blur(15px);
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .weather-form input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+      font-style: italic;
+    }
+
+    .weather-form input:focus {
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 
+        0 0 25px rgba(255, 255, 255, 0.3),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+      transform: scale(1.03);
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .weather-form input:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-2px);
+    }
+
+    .weather-form button {
+      padding: 18px 40px;
+      background: var(--secondary-gradient);
+      border: none;
+      border-radius: 20px;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .weather-form button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s;
+    }
+
+    .weather-form button:hover::before {
+      left: 100%;
+    }
+
+    .weather-form button:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      background: var(--accent-gradient);
+    }
+
+    .weather-form button:active {
+      transform: translateY(-2px);
+    }
+
+    /* Additional Form Elements */
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .temp-toggle {
+      display: flex;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 5px;
+      backdrop-filter: blur(10px);
+    }
+
+    .temp-toggle input[type="radio"] {
+      display: none;
+    }
+
+    .temp-toggle label {
+      padding: 8px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 0;
+      text-align: center;
+    }
+
+    .temp-toggle label::before {
+      display: none;
+    }
+
+    .temp-toggle input[type="radio"]:checked + label {
+      background: var(--secondary-gradient);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+    }
+
+    /* Social Links */
+    .socials {
+      position: relative;
+      margin-top: 30px;
+    }
+
+    .socials::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--accent-gradient);
+      border-radius: 2px;
+      margin-bottom: 25px;
+    }
+
+    .socials p {
+      margin: 30px 0 20px 0;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .socials a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 55px;
+      height: 55px;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 24px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .socials a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--accent-gradient);
+      transform: scale(0);
+      transition: transform 0.4s ease;
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    .socials a:hover::before {
+      transform: scale(1);
+    }
+
+    .socials a:hover {
+      transform: translateY(-5px) scale(1.15);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .container {
+        margin: 20px;
+        padding: 40px 30px;
+        border-radius: 25px;
+      }
+      
+      .header h1 {
+        font-size: 30px;
+      }
+      
+      .header .subtitle {
+        font-size: 16px;
+      }
+      
+      .weather-form input,
+      .weather-form button {
+        padding: 15px 20px;
+        font-size: 16px;
+      }
+      
+      .form-options {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .socials a {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 320px) {
+      .container {
+        padding: 30px 20px;
+      }
+      
+      .header h1 {
+        font-size: 26px;
+      }
+    }
+
+    /* Loading state for button */
+    .weather-form button:focus {
+      outline: 3px solid rgba(255, 255, 255, 0.5);
+      outline-offset: 3px;
+    }
+
+    .socials a:hover {
+  color: #00c6ff;
+}
+  </style>
+</head>
+<body>
+  <!-- Background Weather Elements -->
+  <div class="weather-bg-element">⛅</div>
+  <div class="weather-bg-element">🌤️</div>
+  <div class="weather-bg-element">🌧️</div>
+  <div class="weather-bg-element">☀️</div>
+
+  <div class="container">
+    <div class="header">
+      <h1>Weather App</h1>
+      <div class="subtitle">by Saurabh Kumar</div>
+      <div class="tagline">Get instant weather updates for any city</div>
+    </div>
+
+    <form class="weather-form" action="/weather/city" method="GET">
+      <div class="form-group">
+        <label for="city">Enter City Name</label>
+        <input 
+          type="text" 
+          id="city" 
+          name="city" 
+          placeholder="e.g., Mumbai, Delhi, New York, London" 
+          required
+          autocomplete="address-level2"
+        >
+      </div>
+
+      <div class="form-options">
+        <div class="temp-toggle">
+          <input type="radio" id="celsius" name="unit" value="celsius" checked>
+          <label for="celsius">°C</label>
+          
+          <input type="radio" id="fahrenheit" name="unit" value="fahrenheit">
+          <label for="fahrenheit">°F</label>
+        </div>
+      </div>
+
+      <button type="submit">
+        Get Weather Forecast
+      </button>
+    </form>
+
+    <div class="socials">
+      <p>Connect with me:</p>
+      <div class="social-links">
+        <a href="https://instagram.com/your_insta" target="_blank" title="Instagram" aria-label="Instagram"><i class="fa-brands fa-instagram "></i></a>
+        <a href="https://twitter.com/your_twitter" target="_blank" title="Twitter" aria-label="Twitter"><i class="fa-brands fa-twitter "></i></a>
+        <a href="https://linkedin.com/in/your_linkedin" target="_blank" title="LinkedIn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://github.com/your_github" target="_blank" title="GitHub" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

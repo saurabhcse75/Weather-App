@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather in <%= weather.name %></title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #74ABE2, #5563DE);
+      color: #fff;
+    }
+
+    /* Card container */
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 40px 30px;
+      border-radius: 20px;
+      width: 360px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    /* City Name */
+    .city {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    /* Temperature */
+    .temp {
+      font-size: 50px;
+      font-weight: 700;
+      margin: 10px 0;
+      background: linear-gradient(90deg, #FFD194, #D1913C);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Weather Condition Text */
+    .weather {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    /* Weather icon styling */
+    .weather img {
+      width: 80px;
+      height: 80px;
+      margin-top: 5px;
+    }
+
+    /* Details section */
+    .details {
+      margin-top: 15px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .details p {
+      margin: 8px 0;
+      background: rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 8px;
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="city"><%= weather.name %>, <%= weather.sys.country %></div>
+    <div class="temp"><%= weather.main.temp %>°C</div>
+    <div class="weather">
+      <%= weather.weather[0].main %> — <%= weather.weather[0].description %>
+      <br>
+      <img src="http://openweathermap.org/img/wn/<%= weather.weather[0].icon %>@2x.png" alt="Weather icon">
+    </div>
+    <div class="details">
+      <p><strong>Feels Like:</strong> <%= weather.main.feels_like %>°C</p>
+      <p><strong>Humidity:</strong> <%= weather.main.humidity %>%</p>
+      <p><strong>Wind:</strong> <%= weather.wind.speed %> m/s</p>
+    </div>
+  </div>
+</body>
+</html>

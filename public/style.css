@@ -1,0 +1,96 @@
+/* General Page Styling */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Container Box */
+  .container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    width: 300px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Heading */
+  .container h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  .container h1 span {
+    display: block;
+    font-size: 14px;
+    color: #eee;
+  }
+  
+  /* Form Styling */
+  .weather-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .weather-form label {
+    font-size: 14px;
+    color: #ddd;
+  }
+  
+  .weather-form input {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+  }
+  
+  .weather-form button {
+    padding: 10px;
+    background: #00c6ff;
+    border: none;
+    border-radius: 8px;
+    color: #022233;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .weather-form button:hover {
+    background: #00a0dd;
+  }
+  
+  /* Social Links */
+  .socials {
+    margin-top: 20px;
+  }
+  
+  .socials p {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+  }
+  
+  .socials a {
+    display: inline-block;
+    margin: 0 5px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 5px 10px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  .socials a:hover {
+    background: #fff;
+    color: #0072ff;
+  }
+  
